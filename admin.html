@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Catálogo</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <h2>Painel Administrativo</h2>
+
+    <form id="productForm">
+        <input type="text" id="name" placeholder="Nome do produto" required>
+        <input type="number" id="price" placeholder="Preço" required>
+        <input type="text" id="image" placeholder="URL da imagem" required>
+
+        <label>
+            <input type="checkbox" id="featured">
+            Produto em destaque
+        </label>
+
+        <button type="submit">Salvar produto</button>
+    </form>
+
+    <hr>
+
+    <div id="adminProducts"></div>
+
+    <script type="module" src="admin.js"></script>
+</body>
+
+</html>

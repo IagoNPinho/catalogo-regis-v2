@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catálogo</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="top-banner">
+        🚚 Frete em Fortaleza e RM • 💳 PIX ou Cartão
+    </div>
+
+    <header class="header">
+        <h1>Catálogo</h1>
+        <button id="cartBtn">🛒 <span id="cartCount">0</span></button>
+    </header>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar produto..." />
+    </div>
+
+    <div class="sort-box">
+        <select id="sortSelect">
+            <option value="name-asc">Nome (A–Z)</option>
+            <option value="name-desc">Nome (Z–A)</option>
+            <option value="price-asc">Preço (menor → maior)</option>
+            <option value="price-desc">Preço (maior → menor)</option>
+        </select>
+    </div>
+
+    <section class="featured">
+        <h2>Destaques</h2>
+        <div class="featured-track" id="featuredTrack"></div>
+    </section>
+
+    <section class="products">
+        <h2>Catálogo</h2>
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <!-- Overlay escuro -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Carrinho (Drawer) -->
+    <div class="cart-drawer" id="cartDrawer">
+
+        <!-- Header do carrinho -->
+        <div class="cart-header">
+            <h3>Seu Carrinho</h3>
+            <button id="closeCart" aria-label="Fechar carrinho">✕</button>
+        </div>
+
+        <!-- Lista de itens -->
+        <div class="cart-items" id="cartItems">
+            <!-- Produtos adicionados entram aqui -->
+        </div>
+
+        <!-- Rodapé -->
+        <div class="cart-footer">
+            <strong>Total: R$ <span id="cartTotal">0,00</span></strong>
+            <button id="whatsappBtn">Enviar pedido no WhatsApp</button>
+        </div>
+
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/products.js"></script>
+</body>
+
+</html>
