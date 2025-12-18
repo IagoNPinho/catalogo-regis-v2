@@ -36,18 +36,26 @@ import {
 ========================================================= */
 const loginForm = document.getElementById("loginForm");
 const adminPanel = document.getElementById("adminPanel");
-const logoutBtn = document.getElementById("logout");
+const backToCatalogBtn = document.getElementById("backToCatalog");
+
 
 loginForm.addEventListener("submit", async e => {
   e.preventDefault();
   await signInWithEmailAndPassword(auth, email.value, password.value);
 });
 
-logoutBtn.addEventListener("click", () => signOut(auth));
+backToCatalogBtn.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (err) {
+    console.error("Erro ao sair:", err);
+  } finally {
+    window.location.href = "/index.html";
+  }
+});
 
-onAuthStateChanged(auth, async(user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    console.log(user.uid);
     loginForm.style.display = "none";
     adminPanel.style.display = "block";
     loadProducts(true);

@@ -1,34 +1,17 @@
-import { db } from "../firebase-config.js";
-import {
-  collection,
-  onSnapshot,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { productStore } from "./productStore.js";
 
 const productsGrid = document.getElementById("productsGrid");
 const featuredTrack = document.getElementById("featuredTrack");
+const searchInput = document.getElementById("searchInput");
 
+async function initCatalog() {
+  const products = await productStore.load();
 
-const productsRef = collection(db, "products");
-const q = query(productsRef, orderBy("createdAt", "desc"));
+  renderCatalog(products);
+  renderFeatured(productStore.getFeatured());
+}
 
-let allProducts = [];
-
-// 🔥 Escuta em tempo real
-onSnapshot(q, (snapshot) => {
-
-  allProducts = [];
-
-  snapshot.forEach(docSnap => {
-    allProducts.push({
-      id: docSnap.id,
-      ...docSnap.data()
-    });
-  });
-  renderCatalog(allProducts);
-  renderFeatured(allProducts.filter(p => p.featured));
-});
+initCatalog();
 
 function renderCatalog(products) {
   productsGrid.innerHTML = "";
@@ -42,7 +25,7 @@ function renderCatalog(products) {
       <div class="product-content">
         <h3>${p.name}</h3>
         <span class="price">R$ ${p.price.toFixed(2)}</span>
-        <button onclick="addToCart('${p.id}')">Adicionar</button>
+        <button onclick='addToCart(${JSON.stringify(p)})'>Adicionar</button>
       </div>
     `;
 
@@ -62,6 +45,7 @@ function renderFeatured(products) {
       <div class="featured-card-content">
         <h3>${p.name}</h3>
         <span>R$ ${p.price.toFixed(2)}</span>
+        <button onclick='addToCart(${JSON.stringify(p)})'>Adicionar</button>
       </div>
     `;
 
@@ -70,16 +54,21 @@ function renderFeatured(products) {
 }
 
 // Busca em front-end
-const searchInput = document.getElementById("searchInput");
 let timer;
 
-searchInput.addEventListener("input", () => {
-  clearTimeout(timer);
-  timer = setTimeout(() => {
+searchInput.addEventListener(
+  "input",
+  debounce(() => {
     const term = searchInput.value.toLowerCase().trim();
-    const filtered = allProducts.filter(p =>
-      p.name.toLowerCase().includes(term)
-    );
-    renderCatalog(filtered);
-  }, 200);
-});
+    const result = productStore.search(term);
+    renderCatalog(result);
+  }, 250)
+);
+
+function debounce(fn, delay = 300) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
