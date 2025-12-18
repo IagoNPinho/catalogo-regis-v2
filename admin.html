@@ -68,21 +68,23 @@
         <hr>
 
         <!-- ================= IMPORTAÇÃO ================= -->
-        <h3>Importar produtos</h3>
-        <input type="file" id="jsonFile" accept=".json">
-        <button id="importBtn">Importar em lote</button>
+        <div class="import">
+            <h2>Importar produtos</h2>
+            <input type="file" id="jsonFile" accept=".json">
+            <button id="importBtn">Importar em lote</button>
 
-        <div id="progressContainer" style="display:none; margin-top:16px;">
-            <div style="background:#eee; height:10px; border-radius:6px;">
-                <div id="progressBar" style="
+            <div id="progressContainer" style="display:none; margin-top:16px;">
+                <div style="background:#eee; height:10px; border-radius:6px;">
+                    <div id="progressBar" style="
                     height:10px;
                     width:0%;
                     background:#7B2EEA;
                     border-radius:6px;
                     transition: width .3s;">
+                    </div>
                 </div>
+                <small id="progressText">0%</small>
             </div>
-            <small id="progressText">0%</small>
         </div>
 
         <hr>
@@ -90,7 +92,7 @@
         <!-- ================= LISTAGEM ================= -->
         <div id="adminProducts"></div>
 
-        <input type="text" class="search" id="searchInput" placeholder="Buscar produto pelo nome"/>
+        <input type="text" class="search" id="searchInput" placeholder="Buscar produto pelo nome" />
 
         <button id="loadMore" class="load-more-btn">
             Carregar mais produtos

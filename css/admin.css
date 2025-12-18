@@ -104,6 +104,45 @@ select {
   border-radius: 8px;
 }
 
+/* ================= IMPORT PRODUCTS ================= */
+.import {
+  align-items: center;
+  background: #151518;
+  margin: 24px;
+  padding: 20px;
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+
+}
+
+.import h2 {
+  margin: 6px 0;
+  text-align: center;
+}
+
+.import input {
+  background: #0D0D0F;
+  border: 1px solid #2A2A2F;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.import button {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #7B2EEA, #9E47FF);
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 10px 10px;
+  font-size: 1.05rem;
+}
+
 /* ================= ADMIN CARDS ================= */
 .search {
   margin: 16px 24px;
