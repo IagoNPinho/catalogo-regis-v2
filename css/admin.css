@@ -1,0 +1,223 @@
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: #0D0D0F;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* ================= LOGIN ================= */
+.login-form {
+  max-width: 360px;
+  margin: 10vh auto;
+  background: #151518;
+  padding: 32px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+}
+
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.login-form input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #0D0D0F;
+  color: #fff;
+}
+
+.login-form button {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #7B2EEA, #9E47FF);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ================= HEADER ================= */
+.header {
+  padding: 20px 28px;
+  background: #151518;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.back-btn,
+.logout-btn {
+  background: #0D0D0F;
+  border: 1px solid #2A2A2F;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ================= FORM PRODUTO ================= */
+#productForm {
+  background: #151518;
+  margin: 24px;
+  padding: 20px;
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+#productForm button {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #7B2EEA, #9E47FF);
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+input,
+select {
+  background: #0D0D0F;
+  border: 1px solid #2A2A2F;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* ================= ADMIN CARDS ================= */
+.search {
+  margin: 16px 24px;
+  width: calc(100% - 48px);
+}
+
+#adminProducts {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.admin-card {
+  background: #151518;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #000;
+}
+
+.admin-info {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.admin-actions {
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #2A2A2F;
+}
+
+.admin-actions button {
+  background: #0D0D0F;
+  border: 1px solid #2A2A2F;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ================= LOAD MORE ================= */
+.load-more-btn {
+  margin: 24px auto;
+  display: block;
+  padding: 10px 22px;
+  border-radius: 10px;
+  background: #151518;
+  border: 1px solid #2A2A2F;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ================= MODAL ================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #151518;
+  padding: 24px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-img-preview {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+#saveEdit {
+  background: linear-gradient(135deg, #7B2EEA, #9E47FF);
+  color: #fff;
+}
+
+#closeModal {
+  background: #0D0D0F;
+  color: #fff;
+  border: 1px solid #2A2A2F;
+}

@@ -124,11 +124,13 @@ h3 {
     color: var(--gold-light);
 }
 
+.featured-carousel {
+    overflow-x: auto;
+}
+
 .featured-track {
     display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    gap: 12px;
     padding: 0 calc(50% - 110px);
     -webkit-overflow-scrolling: touch;
 }
@@ -138,12 +140,12 @@ h3 {
 }
 
 .featured-card {
-    min-width: 200px;
+    min-width: 70%;
     max-width: 220px;
     background: var(--gray-bg);
     border-radius: 10px;
     border: var(--gold) solid 2px;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     flex-shrink: 0;
@@ -202,8 +204,8 @@ h3 {
 
 .products-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
 }
 
 @media (min-width: 600px) {
@@ -249,13 +251,13 @@ h3 {
 }
 
 .product-card h3 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 500;
     margin-top: 10px;
     line-height: 1.35;
 }
 
-.product-card p {
+.price {
     margin-bottom: 6px;
     letter-spacing: 0.4px;
     font-weight: 600;

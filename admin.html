@@ -5,31 +5,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin - Catálogo</title>
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 
 <body>
 
-    <h2>Painel Administrativo</h2>
-
-    <form id="productForm">
-        <input type="text" id="name" placeholder="Nome do produto" required>
-        <input type="number" id="price" placeholder="Preço" required>
-        <input type="text" id="image" placeholder="URL da imagem" required>
-
-        <label>
-            <input type="checkbox" id="featured">
-            Produto em destaque
-        </label>
-
-        <button type="submit">Salvar produto</button>
+    <!-- ================= LOGIN ================= -->
+    <form id="loginForm" class="login-form">
+        <h2>Área Administrativa</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
     </form>
 
-    <hr>
+    <!-- ================= PAINEL ADMIN ================= -->
+    <div id="adminPanel" style="display:none;">
 
-    <div id="adminProducts"></div>
+        <header class="header">
+            <h1 class="title">Painel Administrativo</h1>
+            <div class="header-actions">
+                <button id="backToCatalog" class="back-btn">← Catálogo</button>
+                <button id="logout" class="logout-btn">Sair</button>
+            </div>
+        </header>
 
-    <script type="module" src="admin.js"></script>
+        <!-- ================= CADASTRO PRODUTO ================= -->
+        <form id="productForm">
+            <input type="text" id="name" placeholder="Nome do produto" required>
+            <input type="number" id="price" placeholder="Preço" required>
+            <input type="file" id="imageFile" accept="image/*" required>
+
+            <select id="category">
+                <option value="perfumes">Perfumes</option>
+                <option value="maquiagens">Maquiagens</option>
+                <option value="kits">Kits</option>
+            </select>
+
+            <select id="subCategory">
+                <option value="femininos">Femininos</option>
+                <option value="masculinos">Masculinos</option>
+                <option value="femininos-100ml">Femininos 100ml</option>
+                <option value="masculinos-100ml">Masculinos 100ml</option>
+            </select>
+
+            <select id="family">
+                <option value="">Família olfativa</option>
+                <option value="Floral">Floral</option>
+                <option value="Amadeirado">Amadeirado</option>
+                <option value="Oriental">Oriental</option>
+                <option value="Cítrico">Cítrico</option>
+                <option value="Doce">Doce</option>
+                <option value="Aromático">Aromático</option>
+            </select>
+
+            <label>
+                <input type="checkbox" id="featured">
+                Produto em destaque
+            </label>
+
+            <button type="submit">Salvar produto</button>
+        </form>
+
+        <hr>
+
+        <!-- ================= IMPORTAÇÃO ================= -->
+        <h3>Importar produtos</h3>
+        <input type="file" id="jsonFile" accept=".json">
+        <button id="importBtn">Importar em lote</button>
+
+        <div id="progressContainer" style="display:none; margin-top:16px;">
+            <div style="background:#eee; height:10px; border-radius:6px;">
+                <div id="progressBar" style="
+                    height:10px;
+                    width:0%;
+                    background:#7B2EEA;
+                    border-radius:6px;
+                    transition: width .3s;">
+                </div>
+            </div>
+            <small id="progressText">0%</small>
+        </div>
+
+        <hr>
+
+        <!-- ================= LISTAGEM ================= -->
+        <div id="adminProducts"></div>
+
+        <input type="text" class="search" id="searchInput" placeholder="Buscar produto pelo nome"/>
+
+        <button id="loadMore" class="load-more-btn">
+            Carregar mais produtos
+        </button>
+
+        <!-- ================= MODAL EDITAR ================= -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h3>Editar produto</h3>
+
+                <img id="editImagePreview" class="edit-img-preview" />
+
+                <input type="text" id="editName" placeholder="Nome do produto">
+                <input type="number" id="editPrice" placeholder="Preço">
+
+                <select id="editCategory">
+                    <option value="perfumes">Perfumes</option>
+                    <option value="maquiagens">Maquiagens</option>
+                    <option value="kits">Kits</option>
+                </select>
+
+                <select id="editSubCategory">
+                    <option value="femininos">Femininos</option>
+                    <option value="masculinos">Masculinos</option>
+                    <option value="femininos-100ml">Femininos 100ml</option>
+                    <option value="masculinos-100ml">Masculinos 100ml</option>
+                </select>
+
+                <select id="editFamily">
+                    <option value="">Família olfativa</option>
+                    <option value="Floral">Floral</option>
+                    <option value="Amadeirado">Amadeirado</option>
+                    <option value="Oriental">Oriental</option>
+                    <option value="Cítrico">Cítrico</option>
+                    <option value="Doce">Doce</option>
+                    <option value="Aromático">Aromático</option>
+                </select>
+
+                <input type="file" id="editImage" accept="image/*">
+
+                <label>
+                    <input type="checkbox" id="editFeatured">
+                    Produto em destaque
+                </label>
+
+                <div class="modal-actions">
+                    <button id="saveEdit">Salvar</button>
+                    <button id="closeModal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="/js/admin/admin.js"></script>
 </body>
 
 </html>

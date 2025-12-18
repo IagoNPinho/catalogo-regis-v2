@@ -16,7 +16,7 @@
     </div>
 
     <header class="header">
-        <h1>Catálogo</h1>
+        <h1 id="admin">Catálogo</h1>
         <button id="cartBtn">🛒 <span id="cartCount">0</span></button>
     </header>
 
@@ -35,7 +35,10 @@
 
     <section class="featured">
         <h2>Destaques</h2>
-        <div class="featured-track" id="featuredTrack"></div>
+        <div class="featured-carousel">
+            <div class="featured-track" id="featuredTrack"></div>
+        </div>
+        
     </section>
 
     <section class="products">
@@ -68,9 +71,9 @@
 
     </div>
 
-    <script src="js/data.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="js/products.js"></script>
+    <script src="js/public/cart.js"></script>
+    <script type="module" src="js/public/catalog.js"></script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>
