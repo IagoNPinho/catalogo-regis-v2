@@ -38,7 +38,7 @@ function renderCart() {
   let total = 0;
   let count = 0;
 
-  if (cart.length === 0) {
+  if (Object.keys(cart).length === 0) {
     cartItemsContainer.innerHTML = "<p>Carrinho vazio!</p>";
   } else {
 

@@ -17,20 +17,17 @@ let allProducts = [];
 
 // 🔥 Escuta em tempo real
 onSnapshot(q, (snapshot) => {
- 
+
   allProducts = [];
- 
+
   snapshot.forEach(docSnap => {
     allProducts.push({
       id: docSnap.id,
       ...docSnap.data()
     });
   });
-  console.log("3")
   renderCatalog(allProducts);
-  console.log("4")
   renderFeatured(allProducts.filter(p => p.featured));
-  console.log("5")
 });
 
 function renderCatalog(products) {
@@ -71,3 +68,18 @@ function renderFeatured(products) {
     featuredTrack.appendChild(card);
   });
 }
+
+// Busca em front-end
+const searchInput = document.getElementById("searchInput");
+let timer;
+
+searchInput.addEventListener("input", () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    const term = searchInput.value.toLowerCase().trim();
+    const filtered = allProducts.filter(p =>
+      p.name.toLowerCase().includes(term)
+    );
+    renderCatalog(filtered);
+  }, 200);
+});

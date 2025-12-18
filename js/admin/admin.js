@@ -12,7 +12,8 @@ import {
   query,
   orderBy,
   limit,
-  startAfter
+  startAfter,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 /* ================= STORAGE ================= */
@@ -268,7 +269,7 @@ importBtn.addEventListener("click", async () => {
       family: p.family || "",
       image: "",
       featured: false,
-      createdAt: new Date()
+      createdAt: serverTimestamp(),
     });
   }
 
