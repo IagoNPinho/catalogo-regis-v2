@@ -1,3 +1,12 @@
+import {
+  addDoc,
+  collection,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+import { db } from "../firebase-config.js";
+
+
 const cartDrawer = document.getElementById("cartDrawer");
 const cartBtn = document.getElementById("cartBtn");
 const closeCart = document.getElementById("closeCart");
@@ -131,3 +140,32 @@ whatsappBtn.addEventListener("click", () => {
 
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
+
+async function registerSales() {
+  const salesRef = collection(db, "sales");
+
+  for (const item of Object.values(cart)) {
+    await addDoc(salesRef, {
+      productId: item.id,
+      name: item.name,
+      price: item.price,
+      cost: item.cost || 0,
+      quantity: item.quantity,
+      totalSale: item.price * item.quantity,
+      totalCost: (item.cost || 0) * item.quantity,
+      createdAt: serverTimestamp()
+    });
+  }
+}
+
+
+whatsappBtn.addEventListener("click", async () => {
+  if (Object.keys(cart).length === 0) {
+    alert("Seu carrinho está vazio.");
+    return;
+  }
+
+  await registerSales();
+  window.open(url, "_blank");
+  closeCartDrawer();
+});

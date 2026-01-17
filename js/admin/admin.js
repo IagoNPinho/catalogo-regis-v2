@@ -1,3 +1,7 @@
+console.log("loginForm:", document.getElementById("loginForm"));
+console.log("adminPanel:", document.getElementById("adminPanel"));
+console.log("AUTH:", auth);
+
 import { db, storage, auth } from "../firebase-config.js";
 
 /* ================= FIRESTORE ================= */
@@ -21,7 +25,6 @@ import {
   ref,
   uploadBytes,
   getDownloadURL,
-  deleteObject
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 
 /* ================= AUTH ================= */
@@ -31,89 +34,125 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-/* =========================================================
-   AUTH
-========================================================= */
+/* ================= DOM ================= */
 const loginForm = document.getElementById("loginForm");
 const adminPanel = document.getElementById("adminPanel");
 const backToCatalogBtn = document.getElementById("backToCatalog");
 
+const adminProducts = document.getElementById("adminProducts");
+const form = document.getElementById("productForm");
+const loadMore = document.getElementById("loadMore");
+const searchInput = document.getElementById("searchInput");
 
+/* SALES */
+const salesList = document.getElementById("salesList");
+const totalSalesEl = document.getElementById("totalSales");
+const totalCostEl = document.getElementById("totalCost");
+const profitEl = document.getElementById("profit");
+
+/* MODAL */
+const editModal = document.getElementById("editModal");
+const editName = document.getElementById("editName");
+const editPrice = document.getElementById("editPrice");
+const editCost = document.getElementById("editCost");
+const editCategory = document.getElementById("editCategory");
+const editSubCategory = document.getElementById("editSubCategory");
+const editFamily = document.getElementById("editFamily");
+const editFeatured = document.getElementById("editFeatured");
+const editImage = document.getElementById("editImage");
+const editImagePreview = document.getElementById("editImagePreview");
+const saveEdit = document.getElementById("saveEdit");
+const closeModal = document.getElementById("closeModal");
+
+/* ================= AUTH ================= */
 loginForm.addEventListener("submit", async e => {
   e.preventDefault();
-  await signInWithEmailAndPassword(auth, email.value, password.value);
-});
 
-backToCatalogBtn.addEventListener("click", async () => {
   try {
-    await signOut(auth);
+    await signInWithEmailAndPassword(
+      auth,
+      email.value.trim(),
+      password.value.trim()
+    );
   } catch (err) {
-    console.error("Erro ao sair:", err);
-  } finally {
-    window.location.href = "/index.html";
+    console.error("Erro de login:", err);
+
+    await signOut(auth);
+
+    alert("Login inválido. Verifique email e senha.");
+
+    // Limpa somente a senha (UX melhor)
+    password.value = "";
+    password.focus();
+
+    // Garante que o painel não apareça
+    adminPanel.style.display = "none";
+    loginForm.style.display = "flex";
   }
 });
 
-onAuthStateChanged(auth, async (user) => {
+backToCatalogBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "/index.html";
+});
+
+onAuthStateChanged(auth, user => {
   if (user) {
+    alert("USUÁRIO LOGADO");
+
     loginForm.style.display = "none";
     adminPanel.style.display = "block";
+
     loadProducts(true);
+    loadSales();
   } else {
+    alert("NÃO LOGADO");
+
     adminPanel.style.display = "none";
     loginForm.style.display = "block";
   }
 });
 
-/* =========================================================
-   VARIÁVEIS GLOBAIS
-========================================================= */
+
+/* ================= FIRESTORE REFS ================= */
 const productsRef = collection(db, "products");
-const adminProducts = document.getElementById("adminProducts");
-const form = document.getElementById("productForm");
+const salesRef = collection(db, "sales");
 
+/* ================= PAGINAÇÃO ================= */
 let lastVisible = null;
-let isLastPage = false;
 let isLoading = false;
+let isLastPage = false;
 let currentProductId = null;
-
 const PAGE_SIZE = 20;
 
-/* =========================================================
-   CRIAR PRODUTO (COM IMAGEM)
-========================================================= */
+/* ================= CREATE PRODUCT ================= */
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
   const file = imageFile.files[0];
   if (!file) return alert("Imagem obrigatória");
 
-  const storageRef = ref(
-    storage,
-    `products/${category.value}/${subCategory.value}/${Date.now()}`
-  );
-
+  const storageRef = ref(storage, `products/${Date.now()}`);
   await uploadBytes(storageRef, file);
   const imageURL = await getDownloadURL(storageRef);
 
   await addDoc(productsRef, {
-    name: name.value.trim(),
+    name: name.value,
     price: Number(price.value),
+    cost: Number(cost.value),
     category: category.value,
     subCategory: subCategory.value,
     family: family.value || "",
     image: imageURL,
     featured: featured.checked,
-    createdAt: new Date()
+    createdAt: serverTimestamp()
   });
 
   form.reset();
   loadProducts(true);
 });
 
-/* =========================================================
-   PAGINAÇÃO
-========================================================= */
+/* ================= LOAD PRODUCTS ================= */
 async function loadProducts(reset = false) {
   if (isLoading) return;
   isLoading = true;
@@ -124,25 +163,9 @@ async function loadProducts(reset = false) {
     isLastPage = false;
   }
 
-  if (isLastPage) {
-    isLoading = false;
-    return;
-  }
-
-  let q = query(
-    productsRef,
-    orderBy("createdAt", "desc"),
-    limit(PAGE_SIZE)
-  );
-
-  if (lastVisible) {
-    q = query(
-      productsRef,
-      orderBy("createdAt", "desc"),
-      startAfter(lastVisible),
-      limit(PAGE_SIZE)
-    );
-  }
+  const q = lastVisible
+    ? query(productsRef, orderBy("createdAt", "desc"), startAfter(lastVisible), limit(PAGE_SIZE))
+    : query(productsRef, orderBy("createdAt", "desc"), limit(PAGE_SIZE));
 
   const snapshot = await getDocs(q);
 
@@ -153,14 +176,11 @@ async function loadProducts(reset = false) {
   }
 
   lastVisible = snapshot.docs[snapshot.docs.length - 1];
-
   snapshot.forEach(renderProduct);
   isLoading = false;
 }
 
-/* =========================================================
-   RENDER PRODUTO
-========================================================= */
+/* ================= RENDER PRODUCT ================= */
 function renderProduct(docSnap) {
   const p = docSnap.data();
 
@@ -169,135 +189,97 @@ function renderProduct(docSnap) {
   card.dataset.name = p.name.toLowerCase();
 
   card.innerHTML = `
-    ${p.image ? `<img src="${p.image}">` : `<div class="no-image">Sem imagem</div>`}
+    <img src="${p.image}">
     <strong>${p.name}</strong>
-    <span>R$ ${p.price.toFixed(2)}</span>
-
-    <label class="featured-toggle">
-      <input type="checkbox" ${p.featured ? "checked" : ""}>
-      Destaque
-    </label>
-
+    <span>Venda: R$ ${p.price.toFixed(2)}</span>
+    <small>Custo: R$ ${(p.cost || 0).toFixed(2)}</small>
     <div class="actions">
       <button class="edit">Editar</button>
       <button class="delete">Excluir</button>
     </div>
   `;
 
-  /* Toggle destaque */
-  card.querySelector("input").addEventListener("change", e =>
-    updateDoc(doc(db, "products", docSnap.id), {
-      featured: e.target.checked
-    })
-  );
-
-  /* Editar */
-  card.querySelector(".edit").addEventListener("click", () =>
-    openEditModal(docSnap.id)
-  );
-
-  /* Excluir completo */
-  card.querySelector(".delete").addEventListener("click", async () => {
-    if (!confirm("Excluir produto?")) return;
-
-    if (p.image) {
-      await deleteObject(ref(storage, p.image));
-    }
-
+  card.querySelector(".edit").onclick = () => openEditModal(docSnap.id);
+  card.querySelector(".delete").onclick = async () => {
     await deleteDoc(doc(db, "products", docSnap.id));
     loadProducts(true);
-  });
+  };
 
   adminProducts.appendChild(card);
 }
 
-/* =========================================================
-   EDITAR PRODUTO
-========================================================= */
+/* ================= EDIT ================= */
 async function openEditModal(id) {
   currentProductId = id;
-
   const snap = await getDoc(doc(db, "products", id));
   const p = snap.data();
 
   editName.value = p.name;
   editPrice.value = p.price;
+  editCost.value = p.cost || 0;
   editCategory.value = p.category;
   editSubCategory.value = p.subCategory;
   editFamily.value = p.family || "";
   editFeatured.checked = p.featured;
-  editImagePreview.src = p.image || "";
+  editImagePreview.src = p.image;
 
   editModal.style.display = "flex";
 }
 
-saveEdit.addEventListener("click", async () => {
-  if (!currentProductId) return;
-
-  const updates = {
+saveEdit.onclick = async () => {
+  await updateDoc(doc(db, "products", currentProductId), {
     name: editName.value,
     price: Number(editPrice.value),
+    cost: Number(editCost.value),
     category: editCategory.value,
     subCategory: editSubCategory.value,
     family: editFamily.value,
     featured: editFeatured.checked
-  };
-
-  if (editImage.files[0]) {
-    const storageRef = ref(
-      storage,
-      `products/${updates.category}/${updates.subCategory}/${currentProductId}`
-    );
-
-    await uploadBytes(storageRef, editImage.files[0]);
-    updates.image = await getDownloadURL(storageRef);
-  }
-
-  await updateDoc(doc(db, "products", currentProductId), updates);
+  });
 
   editModal.style.display = "none";
   loadProducts(true);
-});
+};
 
-/* =========================================================
-   IMPORTAÇÃO EM LOTE (SEM IMAGEM)
-========================================================= */
-importBtn.addEventListener("click", async () => {
-  const file = jsonFile.files[0];
-  if (!file) return alert("Selecione um arquivo");
+closeModal.onclick = () => editModal.style.display = "none";
 
-  const data = JSON.parse(await file.text());
+/* ================= SALES ================= */
+async function loadSales() {
+  const snapshot = await getDocs(query(salesRef, orderBy("createdAt", "desc")));
 
-  for (const p of data) {
-    await addDoc(productsRef, {
-      name: p.name,
-      price: Number(p.price),
-      category: p.category,
-      subCategory: p.subCategory,
-      family: p.family || "",
-      image: "",
-      featured: false,
-      createdAt: serverTimestamp(),
-    });
-  }
+  let totalSales = 0;
+  let totalCost = 0;
+  salesList.innerHTML = "";
 
-  alert("Importação concluída com sucesso");
-  loadProducts(true);
-});
+  snapshot.forEach(docSnap => {
+    const s = docSnap.data();
+    totalSales += s.totalSale;
+    totalCost += s.totalCost;
 
-/* =========================================================
-   LOAD MORE
-========================================================= */
-loadMore.addEventListener("click", () => loadProducts());
-
-/* =========================================================
-   BUSCA POR NOME (FRONTEND)
-========================================================= */
-searchInput.addEventListener("input", e => {
-  const value = e.target.value.toLowerCase();
-  document.querySelectorAll(".admin-card").forEach(card => {
-    card.style.display = card.dataset.name.includes(value)
-      ? "flex"
-      : "none";
+    salesList.innerHTML += `
+      <div class="sale-item">
+        <strong>${s.name}</strong>
+        <span>${s.quantity}x - R$ ${s.totalSale.toFixed(2)}</span>
+        <button onclick="deleteSale('${docSnap.id}')">Excluir</button>
+      </div>
+    `;
   });
-});
+
+  totalSalesEl.innerText = totalSales.toFixed(2);
+  totalCostEl.innerText = totalCost.toFixed(2);
+  profitEl.innerText = (totalSales - totalCost).toFixed(2);
+}
+
+window.deleteSale = async id => {
+  await deleteDoc(doc(db, "sales", id));
+  loadSales();
+};
+
+loadMore.onclick = () => loadProducts();
+
+searchInput.oninput = e => {
+  const v = e.target.value.toLowerCase();
+  document.querySelectorAll(".admin-card").forEach(c => {
+    c.style.display = c.dataset.name.includes(v) ? "flex" : "none";
+  });
+};

@@ -260,3 +260,28 @@ select {
   color: #fff;
   border: 1px solid #2A2A2F;
 }
+
+/* ================= SALES PANEL ================= */
+
+.sales-panel {
+  margin: 24px;
+  background: #151518;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.sale-item {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  border-bottom: 1px solid #2A2A2F;
+  padding-bottom: 6px;
+}
+
+.sale-item button {
+  background: #0D0D0F;
+  border: 1px solid #2A2A2F;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+}

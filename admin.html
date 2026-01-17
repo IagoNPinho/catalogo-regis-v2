@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin - Catálogo</title>
+    <title>Admin - Cosmetics Store</title>
     <link rel="stylesheet" href="css/admin.css">
 </head>
 
@@ -28,10 +28,27 @@
             </div>
         </header>
 
+        <!-- ================= VENDAS ================= -->
+        <section class="sales-panel">
+            <h2>Vendas</h2>
+
+            <div class="summary">
+                <p>Faturamento: R$ <span id="totalSales">0</span></p>
+                <p>Custo: R$ <span id="totalCost">0</span></p>
+                <p>Lucro: R$ <span id="profit">0</span></p>
+            </div>
+
+            <div id="salesList"></div>
+        </section>
+
+        <hr>
+
         <!-- ================= CADASTRO PRODUTO ================= -->
         <form id="productForm">
             <input type="text" id="name" placeholder="Nome do produto" required>
             <input type="number" id="price" placeholder="Preço" required>
+            <input type="number" id="cost" placeholder="Custo do produto" required>
+
             <input type="file" id="imageFile" accept="image/*" required>
 
             <select id="category">
@@ -67,36 +84,12 @@
 
         <hr>
 
-        <!-- ================= IMPORTAÇÃO ================= -->
-        <div class="import">
-            <h2>Importar produtos</h2>
-            <input type="file" id="jsonFile" accept=".json">
-            <button id="importBtn">Importar em lote</button>
-
-            <div id="progressContainer" style="display:none; margin-top:16px;">
-                <div style="background:#eee; height:10px; border-radius:6px;">
-                    <div id="progressBar" style="
-                    height:10px;
-                    width:0%;
-                    background:#7B2EEA;
-                    border-radius:6px;
-                    transition: width .3s;">
-                    </div>
-                </div>
-                <small id="progressText">0%</small>
-            </div>
-        </div>
-
-        <hr>
-
         <!-- ================= LISTAGEM ================= -->
-        <div id="adminProducts"></div>
-
         <input type="text" class="search" id="searchInput" placeholder="Buscar produto pelo nome" />
 
-        <button id="loadMore" class="load-more-btn">
-            Carregar mais produtos
-        </button>
+        <div id="adminProducts"></div>
+
+        <button id="loadMore" class="load-more-btn">Carregar mais produtos</button>
 
         <!-- ================= MODAL EDITAR ================= -->
         <div id="editModal" class="modal">
@@ -107,6 +100,7 @@
 
                 <input type="text" id="editName" placeholder="Nome do produto">
                 <input type="number" id="editPrice" placeholder="Preço">
+                <input type="number" id="editCost" placeholder="Custo do produto">
 
                 <select id="editCategory">
                     <option value="perfumes">Perfumes</option>
@@ -147,7 +141,6 @@
 
     </div>
 
-    <script type="module" src="/js/admin/admin.js"></script>
+    <script type="module" src="./js/admin/admin.js"></script>
 </body>
-
 </html>

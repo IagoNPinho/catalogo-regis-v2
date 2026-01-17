@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Catálogo</title>
+
+    <title>Cosmetics Store</title>
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/jpg" href="assets/logo.jpg">
+
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -15,15 +20,33 @@
         🚚 Frete em Fortaleza e RM • 💳 PIX ou Cartão
     </div>
 
+    <!-- HEADER -->
     <header class="header">
-        <h1 id="admin">Catálogo</h1>
+        <div class="header-brand" id="admin">
+            <img src="assets/logo.jpg" alt="Cosmetics Store">
+            <h1>Cosmetics Store</h1>
+        </div>
+
         <button id="cartBtn">🛒 <span id="cartCount">0</span></button>
     </header>
 
+    <!-- BANNER BOAS-VINDAS -->
+    <section class="welcome-banner">
+        <img src="assets/banner-catalogo.jpg" alt="Bem-vindo à Cosmetics Store!">
+    </section>
+
+    <!-- FILTRO PRODUTO / SERVIÇO -->
+    <div class="type-filter">
+        <button class="active" data-type="products">Produtos</button>
+        <button data-type="services">Serviços</button>
+    </div>
+
+    <!-- BUSCA -->
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="Buscar produto..." />
     </div>
 
+    <!-- ORDENAÇÃO -->
     <div class="sort-box">
         <select id="sortSelect">
             <option value="name-asc">Nome (A–Z)</option>
@@ -33,42 +56,59 @@
         </select>
     </div>
 
+    <!-- BANNER SERVIÇO (SÓ QUANDO SERVIÇOS) -->
+    <section class="banner-top" id="serviceBanner">
+        <div class="banner-content">
+            <strong>R$ <span id="valorKm">3,00</span> / km</strong>
+        </div>
+    </section>
+
+    <!-- DESTAQUES -->
     <section class="featured">
         <h2>Destaques</h2>
         <div class="featured-carousel">
             <div class="featured-track" id="featuredTrack"></div>
         </div>
-        
     </section>
 
-    <section class="products">
-        <h2>Catálogo</h2>
+    <!-- PRODUTOS -->
+    <section class="products" id="productsSection">
+        <h2>Produtos</h2>
         <div class="products-grid" id="productsGrid"></div>
     </section>
 
-    <!-- Overlay escuro -->
+    <!-- CARRINHO -->
     <div class="cart-overlay" id="cartOverlay"></div>
 
-    <!-- Carrinho (Drawer) -->
     <div class="cart-drawer" id="cartDrawer">
-
-        <!-- Header do carrinho -->
         <div class="cart-header">
             <h3>Seu Carrinho</h3>
-            <button id="closeCart" aria-label="Fechar carrinho">✕</button>
+            <button id="closeCart">✕</button>
         </div>
 
-        <!-- Lista de itens -->
-        <div class="cart-items" id="cartItems">
-            <!-- Produtos adicionados entram aqui -->
-        </div>
+        <div class="cart-items" id="cartItems"></div>
 
-        <!-- Rodapé -->
         <div class="cart-footer">
             <strong>Total: R$ <span id="cartTotal">0,00</span></strong>
             <button id="whatsappBtn">Enviar pedido no WhatsApp</button>
         </div>
+    </div>
 
+    <!-- MODAL SERVIÇO MOTORISTA -->
+    <div class="service-modal" id="serviceModal">
+        <div class="service-modal-content">
+            <h3>Solicitar Motorista Particular</h3>
+
+            <input type="text" id="serviceName" placeholder="Seu nome" required>
+            <input type="tel" id="servicePhone" placeholder="Telefone / WhatsApp" required>
+            <input type="text" id="serviceOrigin" placeholder="Origem" required>
+            <input type="text" id="serviceDestination" placeholder="Destino" required>
+
+            <div class="service-modal-actions">
+                <button id="cancelService">Cancelar</button>
+                <button id="confirmService">Enviar no WhatsApp</button>
+            </div>
+        </div>
     </div>
 
     <script src="js/public/cart.js"></script>

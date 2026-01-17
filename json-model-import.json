@@ -2,19 +2,19 @@
   {
     "name": "Perfume 412 Rose",
     "price": 149.9,
+    "cost": 50.0,
     "category": "perfumes",
     "subCategory": "femininos",
     "family": "Floral",
-    "image": "412-rose.webp",
     "featured": true
   },
   {
     "name": "Perfume 212 VIP",
     "price": 199.9,
+    "cost": 50.0,
     "category": "perfumes",
     "subCategory": "masculinos-100ml",
     "family": "Amadeirado",
-    "image": "212-vip.webp",
     "featured": false
   }
 ]
