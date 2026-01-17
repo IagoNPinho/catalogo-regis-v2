@@ -184,16 +184,25 @@ async function loadProducts(reset = false) {
 function renderProduct(docSnap) {
   const p = docSnap.data();
 
+  const lucro = (p.price || 0) - (p.cost || 0);
+
   const card = document.createElement("div");
   card.className = "admin-card";
   card.dataset.name = p.name.toLowerCase();
+  card.dataset.category = p.category;
 
   card.innerHTML = `
     <img src="${p.image}">
-    <strong>${p.name}</strong>
-    <span>Venda: R$ ${p.price.toFixed(2)}</span>
-    <small>Custo: R$ ${(p.cost || 0).toFixed(2)}</small>
-    <div class="actions">
+    <div class="admin-info">
+      <strong>${p.name}</strong>
+      <span>Venda: R$ ${p.price.toFixed(2)}</span>
+      <span>Custo: R$ ${(p.cost || 0).toFixed(2)}</span>
+      <span style="color:${lucro >= 0 ? '#4CAF50' : '#F44336'}">
+        Lucro: R$ ${lucro.toFixed(2)}
+      </span>
+    </div>
+
+    <div class="admin-actions">
       <button class="edit">Editar</button>
       <button class="delete">Excluir</button>
     </div>
@@ -201,12 +210,14 @@ function renderProduct(docSnap) {
 
   card.querySelector(".edit").onclick = () => openEditModal(docSnap.id);
   card.querySelector(".delete").onclick = async () => {
+    if (!confirm("Excluir produto?")) return;
     await deleteDoc(doc(db, "products", docSnap.id));
     loadProducts(true);
   };
 
   adminProducts.appendChild(card);
 }
+
 
 /* ================= EDIT ================= */
 async function openEditModal(id) {
@@ -283,3 +294,23 @@ searchInput.oninput = e => {
     c.style.display = c.dataset.name.includes(v) ? "flex" : "none";
   });
 };
+
+/* ================= FILTER ================= */
+
+const categoryFilter = document.getElementById("categoryFilter");
+
+function applyFilters() {
+  const nameValue = searchInput.value.toLowerCase();
+  const categoryValue = categoryFilter.value;
+
+  document.querySelectorAll(".admin-card").forEach(card => {
+    const matchName = card.dataset.name.includes(nameValue);
+    const matchCategory =
+      !categoryValue || card.dataset.category === categoryValue;
+
+    card.style.display = matchName && matchCategory ? "flex" : "none";
+  });
+}
+
+searchInput.addEventListener("input", applyFilters);
+categoryFilter.addEventListener("change", applyFilters);
