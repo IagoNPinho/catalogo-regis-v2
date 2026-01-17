@@ -201,12 +201,6 @@ h3 {
     padding: 16px;
 }
 
-.products h2 {
-    font-size: 1.4rem;
-    margin-bottom: 12px;
-    color: var(--gold-light);
-}
-
 .products-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
